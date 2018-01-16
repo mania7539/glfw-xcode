@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E5128CD9200DC37B0028D998 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5128CD8200DC37B0028D998 /* main.cpp */; };
-		E5128CE1200DD5E70028D998 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE0200DD5E70028D998 /* OpenGL.framework */; };
+		E5128CE1200DD5E70028D998 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE0200DD5E70028D998 /* OpenGL.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		E5128CE3200DD7600028D998 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE2200DD7600028D998 /* libGLEW.2.1.0.dylib */; };
 		E5128CE5200DD8AA0028D998 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE4200DD8AA0028D998 /* libglfw.3.2.dylib */; };
 /* End PBXBuildFile section */

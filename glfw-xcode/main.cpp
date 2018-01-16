@@ -1,27 +1,6 @@
-//
 //  main.cpp
-//  glfw-xcode
-//
-//  Created by Liu Ray on 16/01/2018.
-//  Copyright © 2018 Liu Ray. All rights reserved.
-//
-/*
 #include <iostream>
-
-// GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
-
-
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
-}
-*/
 #include <GLFW/glfw3.h>
 
 int main(void)
@@ -42,6 +21,16 @@ int main(void)
     
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    
+    // TODO: GLEW code
+    // Documentation: We need to create a valid OpenGL rendering context
+    // where do we do this? glfwMakeContextCurrent(window);
+    if(glewInit() != GLEW_OK) {
+        std::cout << "Failed to initialize GLEW" << std::endl;
+        return -1;
+    }
+    
+    std::cout << "GLVERSION: " << glGetString(GL_VERSION) << std::endl;
     
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
