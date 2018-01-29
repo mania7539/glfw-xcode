@@ -6,6 +6,27 @@
 #include <string>
 #include <vector>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // make sure the viewport matches the new window dimensions; note that width and
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
+}
+
 // helper to check and display for shader compiler errors
 bool check_shader_compile_status(unsigned int obj) {
     GLint status;
@@ -76,25 +97,31 @@ int main(void)
     
     std::cout << "GLVERSION: " << glGetString(GL_VERSION) << std::endl;
     
-    // Shader source code
     std::string vertex_source =
-    "#version 330\n"
-    "layout(location = 0) in vec4 vposition;\n"
-    "layout(location = 1) in vec2 vtexcoord;\n"
-    "out vec2 ftexcoord;\n"
-    "void main() {\n"
-    "   ftexcoord = vtexcoord;\n"
-    "   gl_Position = vposition;\n"
+    "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "layout (location = 2) in vec2 aTexCoord;\n"
+    "out vec3 ourColor;\n"
+    "out vec2 TexCoord;\n"
+    "void main()\n"
+    "{\n"
+    "    gl_Position = vec4(aPos, 1.0);\n"
+    "    ourColor = aColor;\n"
+    "    TexCoord = vec2(aTexCoord.x, aTexCoord.y);\n"
     "}\n";
     
     std::string fragment_source =
-    "#version 330\n"
-    "uniform sampler2D tex;\n" // texture uniform
-    "in vec2 ftexcoord;\n"
-    "layout(location = 0) out vec4 FragColor;\n"
-    "void main() {\n"
-    "   FragColor = texture(tex, ftexcoord);\n"
+    "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "in vec3 ourColor;\n"
+    "in vec2 TexCoord;\n"
+    "uniform sampler2D texture1;\n"
+    "void main()\n"
+    "{\n"
+    "    FragColor = texture(texture1, TexCoord);\n"
     "}\n";
+
     
     // program and shader handles
     unsigned int shader_program, vertex_shader, fragment_shader;
@@ -129,152 +156,117 @@ int main(void)
     
     // create program
     shader_program = glCreateProgram();
-    
+
     // attach shaders
     glAttachShader(shader_program, vertex_shader);
     glAttachShader(shader_program, fragment_shader);
-    
+
     // link the program and check for errors
     glLinkProgram(shader_program);
     check_program_link_status(shader_program);
     
-    // get texture uniform location
-    unsigned int texture_location = glGetUniformLocation(shader_program, "tex");
-    
-    // vao and vbo handle
-    unsigned int vao, vbo, ibo;
-    
-    // generate and bind the vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    
-    // generate and bind the vertex buffer object
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    
-    // data for a fullscreen quad (this time with texture coords)
-    float vertexData[] = {
-        //  X     Y     Z           U     V
-        1.0f, 1.0f, 0.0f,       1.0f, 1.0f, // vertex 0
-        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, // vertex 1
-        1.0f,-1.0f, 0.0f,       1.0f, 0.0f, // vertex 2
-        -1.0f,-1.0f, 0.0f,       0.0f, 0.0f, // vertex 3
-    }; // 4 vertices with 5 components (floats) each
-    
-    // fill with data
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
-    
-    
-    // set up generic attrib pointers
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-    
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
-    
-    
-    // generate and bind the index buffer object
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    
-    unsigned int indexData[] = {
-        0,1,2, // first triangle
-        2,1,3, // second triangle
+    // set up vertex data (and buffer(s)) and configure vertex attributes
+    // ------------------------------------------------------------------
+    float vertices[] = {
+        // positions          // colors           // texture coords
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
     };
-
-    // fill with data
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*2*3, indexData, GL_STATIC_DRAW);
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+    unsigned int VBO, VAO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     
-    // "unbind" vao
-    glBindVertexArray(0);
+    glBindVertexArray(VAO);
     
-    // texture handle
-    GLuint texture;
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    // generate texture
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    
+    
+    // load and create a texture
+    // -------------------------
+    unsigned int texture;
     glGenTextures(1, &texture);
-    
-    // bind the texture
-    glBindTexture(GL_TEXTURE_2D, texture);
-    
-    // create some image data
-    std::vector<GLubyte> image(4*width*height);
-    for(int j = 0;j<height;++j) {
-        for(int i = 0;i<width;++i) {
-            size_t index = j*width + i;
-            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
-            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
-            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
-            image[4*index + 3] = 0xFF;                   // A
-        }
-    }
-    
-    // set texture parameters
+    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // load image, create texture and generate mipmaps
+//    int width, height;
+    int nrChannels;
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    std::string imagePath = "container.jpg";
+    unsigned char *data = stbi_load(imagePath.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
     
-    // set texture content
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
     
-    
-    /* Loop until the user closes the window */
+    // render loop
+    // -----------
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        // input
+        // -----
+        processInput(window);
+        
+        // render
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        // START:modern opengl
-        // use the shader program
-        glUseProgram(shader_program);
-        
-        // bind texture to texture unit 0
-        glActiveTexture(GL_TEXTURE0);
+        // bind Texture
         glBindTexture(GL_TEXTURE_2D, texture);
         
-        // set texture uniform
-        glUniform1i(texture_location, 0);
-        
-        // bind the vao
-        glBindVertexArray(vao);
-        
-        // draw
+        // render container
+//        ourShader.use();
+        glUseProgram(shader_program);
+        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
-        // check for errors
-        GLenum error = glGetError();
-        if(error != GL_NO_ERROR) {
-            std::cerr << error << std::endl;
-            break;
-        }
-        // END: modern opengl
-        
-        /* Swap front and back buffers */
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
-        
-        /* Poll for and process events */
         glfwPollEvents();
     }
     
-    // delete the created objects
+    // optional: de-allocate all resources once they've outlived their purpose:
+    // ------------------------------------------------------------------------
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     
-    glDeleteTextures(1, &texture);
-    
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ibo);
-    
-    glDetachShader(shader_program, vertex_shader);
-    glDetachShader(shader_program, fragment_shader);
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
-    glDeleteProgram(shader_program);
-    
-    glfwDestroyWindow(window);
-    
-    
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
 }
-
