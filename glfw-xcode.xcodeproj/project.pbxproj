@@ -11,6 +11,7 @@
 		E5128CE3200DD7600028D998 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE2200DD7600028D998 /* libGLEW.2.1.0.dylib */; };
 		E5128CE5200DD8AA0028D998 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE4200DD8AA0028D998 /* libglfw.3.2.dylib */; };
 		E5128CE62010A2B90028D998 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE0200DD5E70028D998 /* OpenGL.framework */; };
+		E595415D201F197C00950E88 /* include in Frameworks */ = {isa = PBXBuildFile; fileRef = E595415C201F197B00950E88 /* include */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,16 @@
 		E5954157201ED89000950E88 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 		E5954158201EF40800950E88 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		E5954159201EFB5E00950E88 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
+		E595415A201F191300950E88 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = ../../../../../../usr/local/Cellar/glm/0.9.8.5/include/glm; sourceTree = "<group>"; };
+		E595415C201F197B00950E88 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../../../../../usr/local/Cellar/glm/0.9.8.5/include; sourceTree = "<group>"; };
+		E595415E201F1A1000950E88 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		E595415F201F1F2900950E88 /* marble.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = marble.jpg; sourceTree = "<group>"; };
+		E5954160201F1F2900950E88 /* metal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = metal.png; sourceTree = "<group>"; };
+		E5954161201F206600950E88 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		E5954162201F21D700950E88 /* 5.1.framebuffers.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 5.1.framebuffers.vs; sourceTree = "<group>"; };
+		E5954163201F220300950E88 /* 5.1.framebuffers.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 5.1.framebuffers.fs; sourceTree = "<group>"; };
+		E5954164201F224A00950E88 /* 5.1.framebuffers_screen.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 5.1.framebuffers_screen.fs; sourceTree = "<group>"; };
+		E5954165201F225900950E88 /* 5.1.framebuffers_screen.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 5.1.framebuffers_screen.vs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E595415D201F197C00950E88 /* include in Frameworks */,
 				E5128CE62010A2B90028D998 /* OpenGL.framework in Frameworks */,
 				E5128CE5200DD8AA0028D998 /* libglfw.3.2.dylib in Frameworks */,
 				E5128CE3200DD7600028D998 /* libGLEW.2.1.0.dylib in Frameworks */,
@@ -70,10 +82,18 @@
 		E5128CD7200DC37B0028D998 /* glfw-xcode */ = {
 			isa = PBXGroup;
 			children = (
+				E595415F201F1F2900950E88 /* marble.jpg */,
+				E5954160201F1F2900950E88 /* metal.png */,
 				E5954159201EFB5E00950E88 /* awesomeface.png */,
 				E5954158201EF40800950E88 /* stb_image.h */,
 				E5954157201ED89000950E88 /* container.jpg */,
 				E5128CD8200DC37B0028D998 /* main.cpp */,
+				E595415E201F1A1000950E88 /* camera.h */,
+				E5954161201F206600950E88 /* shader.h */,
+				E5954162201F21D700950E88 /* 5.1.framebuffers.vs */,
+				E5954163201F220300950E88 /* 5.1.framebuffers.fs */,
+				E5954164201F224A00950E88 /* 5.1.framebuffers_screen.fs */,
+				E5954165201F225900950E88 /* 5.1.framebuffers_screen.vs */,
 			);
 			path = "glfw-xcode";
 			sourceTree = "<group>";
@@ -81,6 +101,8 @@
 		E5128CDF200DD5E70028D998 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E595415C201F197B00950E88 /* include */,
+				E595415A201F191300950E88 /* glm */,
 				E5128CE4200DD8AA0028D998 /* libglfw.3.2.dylib */,
 				E5128CE2200DD7600028D998 /* libGLEW.2.1.0.dylib */,
 				E5128CE0200DD5E70028D998 /* OpenGL.framework */,
