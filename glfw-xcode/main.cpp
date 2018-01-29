@@ -117,9 +117,10 @@ int main(void)
     "in vec3 ourColor;\n"
     "in vec2 TexCoord;\n"
     "uniform sampler2D texture1;\n"
+    "uniform sampler2D texture2;\n"
     "void main()\n"
     "{\n"
-    "    FragColor = texture(texture1, TexCoord);\n"
+    "    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);\n"
     "}\n";
 
     
@@ -230,6 +231,40 @@ int main(void)
     }
     stbi_image_free(data);
     
+    // texture 2
+    // ---------
+    unsigned int texture2;
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    std::string imagePath2 = "awesomeface.png";
+    data = stbi_load(imagePath2.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+    
+    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+    // -------------------------------------------------------------------------------------------
+    glUseProgram(shader_program); // don't forget to activate/use the shader before setting uniforms!
+    // either set it manually like so:
+    glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0);
+    // or set it via the texture class
+//    ourShader.setInt(, 1);
+    glUniform1i(glGetUniformLocation(shader_program, "texture2"), 1);
     
     // render loop
     // -----------
@@ -245,7 +280,11 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         // bind Texture
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
+        
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
         
         // render container
 //        ourShader.use();

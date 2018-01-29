@@ -33,6 +33,7 @@
 		E5128CE4200DD8AA0028D998 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
 		E5954157201ED89000950E88 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 		E5954158201EF40800950E88 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		E5954159201EFB5E00950E88 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +70,7 @@
 		E5128CD7200DC37B0028D998 /* glfw-xcode */ = {
 			isa = PBXGroup;
 			children = (
+				E5954159201EFB5E00950E88 /* awesomeface.png */,
 				E5954158201EF40800950E88 /* stb_image.h */,
 				E5954157201ED89000950E88 /* container.jpg */,
 				E5128CD8200DC37B0028D998 /* main.cpp */,
