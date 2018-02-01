@@ -9,6 +9,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "Shader.h"
+#include "VertexBuffer.h"
+#include "VertexArray.h"
+#include "IndexBuffer.h"
+#include "Renderer.h"
+
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------
@@ -122,49 +128,6 @@ int main(void)
     "{\n"
     "    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);\n"
     "}\n";
-
-    
-    // program and shader handles
-    unsigned int shader_program, vertex_shader, fragment_shader;
-    
-    // we need these to properly pass the strings
-    const char* source;
-    int length;
-    
-    // create and compiler vertex shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    source = vertex_source.c_str();
-    length = (int) vertex_source.size();
-    glShaderSource(vertex_shader, 1, &source, &length);
-    glCompileShader(vertex_shader);
-    if(!check_shader_compile_status(vertex_shader)) {
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return 1;
-    }
-    
-    // create and compiler fragment shader
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    source = fragment_source.c_str();
-    length = (int) fragment_source.size();
-    glShaderSource(fragment_shader, 1, &source, &length);
-    glCompileShader(fragment_shader);
-    if(!check_shader_compile_status(fragment_shader)) {
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return 1;
-    }
-    
-    // create program
-    shader_program = glCreateProgram();
-
-    // attach shaders
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, fragment_shader);
-
-    // link the program and check for errors
-    glLinkProgram(shader_program);
-    check_program_link_status(shader_program);
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -179,7 +142,16 @@ int main(void)
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
-    unsigned int VBO, VAO, EBO;
+    
+    VertexBuffer vb(vertices, 4 * 8 * sizeof(float));
+    VertexArray  va;
+    VertexBufferLayout layout;
+    layout.push<float>(8);
+    
+//    unsigned int VBO, VAO, EBO;
+    va.addBuffer(vb, layout);
+    IndexBuffer indexBuffer(indices, 6);
+    
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -261,12 +233,30 @@ int main(void)
     
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
-    glUseProgram(shader_program); // don't forget to activate/use the shader before setting uniforms!
-    // either set it manually like so:
-    glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0);
-    // or set it via the texture class
-//    ourShader.setInt(, 1);
-    glUniform1i(glGetUniformLocation(shader_program, "texture2"), 1);
+    Shader shader(vertex_source, fragment_source);
+    shader.bind();
+    shader.setUniform1i("texture1", 0);
+    shader.setUniform1i("texture2", 1);
+    
+    
+    // bind Texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    
+    // render container
+    //        ourShader.use();
+    
+    
+//    glUseProgram(shader_program);
+    
+    
+    glBindVertexArray(VAO);
+    
+    
+    
     
     // render loop
     // -----------
@@ -280,18 +270,6 @@ int main(void)
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        
-        // bind Texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
-        
-        // render container
-//        ourShader.use();
-        glUseProgram(shader_program);
-        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

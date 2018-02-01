@@ -11,6 +11,12 @@
 		E5128CE3200DD7600028D998 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE2200DD7600028D998 /* libGLEW.2.1.0.dylib */; };
 		E5128CE5200DD8AA0028D998 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE4200DD8AA0028D998 /* libglfw.3.2.dylib */; };
 		E5128CE62010A2B90028D998 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5128CE0200DD5E70028D998 /* OpenGL.framework */; };
+		E59541692022DA2600950E88 /* VertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E59541672022DA2600950E88 /* VertexArray.cpp */; };
+		E595416C2022DA5800950E88 /* VertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E595416A2022DA5800950E88 /* VertexBuffer.cpp */; };
+		E595416F2022DA6900950E88 /* VertexBufferLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E595416D2022DA6900950E88 /* VertexBufferLayout.cpp */; };
+		E59541722022DAB900950E88 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E59541702022DAB900950E88 /* Renderer.cpp */; };
+		E59541752022DCCC00950E88 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E59541732022DCCC00950E88 /* Shader.cpp */; };
+		E59541792022F2DF00950E88 /* IndexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E59541772022F2DF00950E88 /* IndexBuffer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +40,18 @@
 		E5954157201ED89000950E88 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 		E5954158201EF40800950E88 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		E5954159201EFB5E00950E88 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
+		E59541672022DA2600950E88 /* VertexArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexArray.cpp; sourceTree = "<group>"; };
+		E59541682022DA2600950E88 /* VertexArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexArray.h; sourceTree = "<group>"; };
+		E595416A2022DA5800950E88 /* VertexBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBuffer.cpp; sourceTree = "<group>"; };
+		E595416B2022DA5800950E88 /* VertexBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexBuffer.h; sourceTree = "<group>"; };
+		E595416D2022DA6900950E88 /* VertexBufferLayout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferLayout.cpp; sourceTree = "<group>"; };
+		E595416E2022DA6900950E88 /* VertexBufferLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexBufferLayout.h; sourceTree = "<group>"; };
+		E59541702022DAB900950E88 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		E59541712022DAB900950E88 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		E59541732022DCCC00950E88 /* Shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
+		E59541742022DCCC00950E88 /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
+		E59541772022F2DF00950E88 /* IndexBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IndexBuffer.cpp; sourceTree = "<group>"; };
+		E59541782022F2DF00950E88 /* IndexBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexBuffer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +92,18 @@
 				E5954158201EF40800950E88 /* stb_image.h */,
 				E5954157201ED89000950E88 /* container.jpg */,
 				E5128CD8200DC37B0028D998 /* main.cpp */,
+				E59541672022DA2600950E88 /* VertexArray.cpp */,
+				E59541682022DA2600950E88 /* VertexArray.h */,
+				E595416A2022DA5800950E88 /* VertexBuffer.cpp */,
+				E595416B2022DA5800950E88 /* VertexBuffer.h */,
+				E595416D2022DA6900950E88 /* VertexBufferLayout.cpp */,
+				E595416E2022DA6900950E88 /* VertexBufferLayout.h */,
+				E59541702022DAB900950E88 /* Renderer.cpp */,
+				E59541712022DAB900950E88 /* Renderer.h */,
+				E59541732022DCCC00950E88 /* Shader.cpp */,
+				E59541742022DCCC00950E88 /* Shader.h */,
+				E59541772022F2DF00950E88 /* IndexBuffer.cpp */,
+				E59541782022F2DF00950E88 /* IndexBuffer.h */,
 			);
 			path = "glfw-xcode";
 			sourceTree = "<group>";
@@ -146,6 +176,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5128CD9200DC37B0028D998 /* main.cpp in Sources */,
+				E59541722022DAB900950E88 /* Renderer.cpp in Sources */,
+				E595416F2022DA6900950E88 /* VertexBufferLayout.cpp in Sources */,
+				E59541692022DA2600950E88 /* VertexArray.cpp in Sources */,
+				E59541792022F2DF00950E88 /* IndexBuffer.cpp in Sources */,
+				E59541752022DCCC00950E88 /* Shader.cpp in Sources */,
+				E595416C2022DA5800950E88 /* VertexBuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
